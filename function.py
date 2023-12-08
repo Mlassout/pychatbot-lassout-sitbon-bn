@@ -216,3 +216,39 @@ def matrice_tfidf(directory):
                         matrice[h][i+1]=dico_TFIDF[mot]
 
     return matrice
+
+
+def word_question(chaine):
+
+    list=[]   # on définit une liste vide
+    mot=""   # on crée une variable mot où l'on stocke une chaine vide
+
+    for i in range (len(chaine)):  # on crée une boucle pour qui se répète jusqu'a la taille de la chaine
+        if chaine[i]!=" ":   # si le caractère est vide on l'ajoute a la variable mot
+            mot+=chaine[i]
+        else:
+            if mot=="d" or mot=="j" or mot=="s" or mot=="n":   # sinon pour les lettres d, j, s, n on ajoute un e après
+                mot+="e"
+            if mot=="c" :  # si c'est un c on ajoute un ela
+                mot+="ela"
+            if mot=="l": # si c'est un l on a une chance sur deux qu'il y est un a ou un e
+                a_ou_e = random.randint(1,2)
+                if a_ou_e == 1:
+                    mot +="e"
+                else:
+                    mot +="a"
+            if mot not in list:    # si le contenu de la variable mot est dans le dictionnaire on ajoute 1
+                list.append(mot)
+            mot=""
+
+    return list
+
+def mot_important(list,matrice):
+
+    list_mot=[]
+    for mot in list:
+        if mot in matrice:
+            list_mot.append(mot)
+
+    return list_mot
+

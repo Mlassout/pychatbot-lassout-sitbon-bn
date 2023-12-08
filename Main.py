@@ -27,6 +27,9 @@ if __name__=="__main__":
 
     Matrice = matrice_tfidf(directory_cleaned)
 
+    for i in range (len(Matrice )):
+        print(Matrice[i])
+
 
 
 
@@ -149,6 +152,8 @@ if __name__=="__main__":
         president_ecolo = "Sarkozy"
 
 
+
+
     value_end_menu=1
     while value_end_menu==1:
         print("--- Menu ---\n\n"
@@ -186,3 +191,11 @@ if __name__=="__main__":
         value_end_menu=int(input("-Voulez vous acceder de nouveau au menu, tappez 1 sinon 2\n"))
 
     print("Fin de l'execution du programme")
+
+
+    question=input("Entre ta question")
+    question=ponctuation_str(minuscule(question))
+    mot_question=word_question(question)
+    print(mot_question)
+
+    mot_a_traiter=mot_important(mot_question,Matrice)
