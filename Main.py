@@ -152,12 +152,12 @@ if __name__=="__main__":
     value_end_menu=1
     while value_end_menu==1:
         print("--- Menu ---\n\n"
-              "-si vous souhaitez afficher les mots les moins importants, tappez 1\n"
-              "-si vous souhaitez afficher les mots les plus importants, tappez 2\n"
-              "-si vous souhaitez afficher le mot le plus important par Chirac, tappez 3\n"
-              "-si vous souhaitez afficher les présidents parlant de Nation, ainsi que celui qui en parle le plus, tappez 4\n"
-              "-si vous souhaitez afficher le président parlant en premier de l'écologie, tappez 5\n"
-              "-si vous souhaitez afficher tous les mots de tous les discours hormis les non-importants, tappez 6\n")
+              "-si vous souhaitez afficher les mots les moins importants, tapez 1\n"
+              "-si vous souhaitez afficher les mots les plus importants, tapez 2\n"
+              "-si vous souhaitez afficher le mot le plus important par Chirac, tapez 3\n"
+              "-si vous souhaitez afficher les présidents parlant de Nation, ainsi que celui qui en parle le plus, tapez 4\n"
+              "-si vous souhaitez afficher le président parlant en premier de l'écologie, tapez 5\n"
+              "-si vous souhaitez afficher tous les mots de tous les discours hormis les non-importants, tapez 6\n")
 
         value_menu=0
         while value_menu<1 or value_menu>6:
