@@ -306,15 +306,15 @@ def cpt_mot_question(dico):
     return dictionnaire'''
 
 
-def dictionnaire_filtre_matrice(dico,list,nbr_de_mot,matrice):
+def dictionnaire_filtre_matrice(dico,nbr_de_mot,matrice):
+    somme=0
     dictionnaire={}
     for mot in dico.keys():
-        if mot in list:
-            for i in range(len(matrice)):
-                for j in range(len(matrice[i])):
-                    if matrice[i][j] == mot:
-                        mot
-            dictionnaire[mot]=dico[mot]/nbr_de_mot
+        for i in range(len(matrice)):
+            if matrice[i][0] == mot:
+                for j in range(1,len(matrice[i])):
+                    somme+=int(matrice[i][j])
+                dictionnaire[mot]=(dico[mot]/nbr_de_mot)*(somme/(len(matrice[i])-1))
 
     return dictionnaire
 

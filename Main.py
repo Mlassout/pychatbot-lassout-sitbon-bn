@@ -192,4 +192,4 @@ if __name__=="__main__":
     list_mot_important=mot_important(mot_question,Matrice)
     dico_mot_cpt=scan_ligne(ponctuation_str(minuscule(question)))
     cpt_question=cpt_mot_question(dico_mot_cpt)
-    print(dictionnaire_filtre_matrice(dico_mot_cpt,list_mot_important,cpt_question))
+    print(dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice))
