@@ -79,9 +79,20 @@ def ponctuation_str(l) : # entre en paramètre une chaine str
     return chaine # renvoie la chaine
 
 
-def cleaned(l): # entre en paramètre une liste comprenant le nom de fichier
+# Fonction Cleaned avec suppression de la directory si existante
+# (permet plusieurs exécutions du programme sans suppression manuelle...)
 
-    os.mkdir('./cleaned/') # création d'un dossier "cleaned"
+
+def cleaned(l): # entre en paramètre une liste comprenant le nom de fichier
+# --- Suppression de la directory cleaned si existante ------------------------------------------------------
+    if os.path.isdir("./cleaned"):
+        for f in os.listdir("./cleaned"):  # suppression des tous les fichiers du repertoire
+            # directory existe : à supprimer
+            os.remove(os.path.join("./cleaned", f))  # suppression fichiers du repertoire à vider
+        os.removedirs("./cleaned")
+
+    os.mkdir('./cleaned/')  # création directory "cleaned"
+# -----------------------------------------------------------------------------------------------------------
     txt=""
 
     for i in range (len(l)): # parcour la liste donné en paramètre
@@ -95,12 +106,12 @@ def cleaned(l): # entre en paramètre une liste comprenant le nom de fichier
             with open('./cleaned/' + nom_fichier_cleaned, 'w') as p: # crée le fichier à partir du nom du fichier modifié
                 p.write(txt) # écrit dans ce fichier le contenu du fichier iniatial modifié par la fonction ponctuation_str et minuscule
 
-
 def scan_ligne(chaine):
 
     dico={}   # on définit un dictionnaire vide
     mot=""   # on crée une variable mot où l'on stocke une chaine vide
 
+    chaine+=" "
     for i in range (len(chaine)):  # on crée une boucle pour qui se répète jusqu'a la taille de la chaine
         if chaine[i]!=" ":   # si le caractère est vide on l'ajoute a la variable mot
             mot+=chaine[i]
@@ -160,7 +171,7 @@ def score_idf_dico(dictionnaire):
 
     for mot in dictionnaire.keys():    # parcourt les clés du dictionnaire et effectue le calcul du score IDF pour chaque mot.
         nbr_iteration = dictionnaire[mot]   # Récupère le nombre d'occurrences du mot dans le dictionnaire.
-        idf = math.log(1 / (nbr_iteration / nbr_mot))   # Calcule le score IDF pour le mot
+        idf = math.log10(1 / (nbr_iteration / nbr_mot))   # Calcule le score IDF pour le mot
 
         dico_idf[mot] = idf   # stocke le score idf dans le dictionnaire
 
@@ -217,12 +228,37 @@ def matrice_tfidf(directory):
 
     return matrice
 
+# -----
+
+def saisie():
+    '''
+       Fonction de saisie d'un nombre entre 0 et 9.
+
+       Aucun argument en entrée.
+
+       Sortie :
+       - valeur : int
+           Valeur numérique comprise entre 0 et 9 (un seul caractère saisi).
+
+       La fonction utilise une boucle pour garantir une saisie correcte et valide.
+       Si l'entrée contient plus d'un caractère, la fonction ignore l'entrée et continue la boucle.
+       Si l'entrée est un nombre entre 0 et 9, la fonction renvoie cette valeur sous forme d'entier.
+       '''
+    flag = True
+    entree = ""
+    while flag:
+        entree = input("Entrer un nombre compris entre 0 et 9 : ")
+        if len(entree) > 1:
+            None
+        elif ord(entree) > 47 and ord(entree) < 58: # l'entree est un nombre compris entre 0 et 9
+            return int(entree)
+
 
 def word_question(chaine):
 
     list=[]   # on définit une liste vide
     mot=""   # on crée une variable mot où l'on stocke une chaine vide
-
+    chaine+=" "
     for i in range (len(chaine)):  # on crée une boucle pour qui se répète jusqu'a la taille de la chaine
         if chaine[i]!=" ":   # si le caractère est vide on l'ajoute a la variable mot
             mot+=chaine[i]
@@ -243,12 +279,42 @@ def word_question(chaine):
 
     return list
 
+
 def mot_important(list,matrice):
 
     list_mot=[]
     for mot in list:
-        if mot in matrice:
-            list_mot.append(mot)
+        for i in range (len(matrice)):
+            for j in range (len(matrice[i])):
+                if matrice[i][j]==mot:
+                    list_mot.append(mot)
 
     return list_mot
+
+def cpt_mot_question(dico):
+    cpt_total=0
+    for nombre in dico.values():
+        cpt_total+=nombre
+    return cpt_total
+
+'''def dictionnaire_filtre_matrice(dico,list,nbr_de_mot):
+    dictionnaire={}
+    for mot in dico.keys():
+        if mot in list:
+            dictionnaire[mot]=dico[mot]/nbr_de_mot
+
+    return dictionnaire'''
+
+
+def dictionnaire_filtre_matrice(dico,list,nbr_de_mot,matrice):
+    dictionnaire={}
+    for mot in dico.keys():
+        if mot in list:
+            for i in range(len(matrice)):
+                for j in range(len(matrice[i])):
+                    if matrice[i][j] == mot:
+                        mot
+            dictionnaire[mot]=dico[mot]/nbr_de_mot
+
+    return dictionnaire
 

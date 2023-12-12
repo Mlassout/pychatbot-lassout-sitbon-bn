@@ -150,52 +150,46 @@ if __name__=="__main__":
         president_ecolo = "Mitterrand"
     if indice_ecologie_president == 8:
         president_ecolo = "Sarkozy"
-
-
-
-
-    value_end_menu=1
-    while value_end_menu==1:
-        print("--- Menu ---\n\n"
-              "-si vous souhaitez afficher les mots les moins importants, tappez 1\n"
-              "-si vous souhaitez afficher les mots les plus importants, tappez 2\n"
-              "-si vous souhaitez afficher le mot le plus important par Chirac, tappez 3\n"
-              "-si vous souhaitez afficher les présidents parlant de Nation, ainsi que celui qui en parle le plus, tappez 4\n"
-              "-si vous souhaitez afficher le président parlant en premier de l'écologie, tappez 5\n"
-              "-si vous souhaitez afficher tous les mots de tous les discours hormis les non-importants, tappez 6\n")
-
-        value_menu=0
-        while value_menu<1 or value_menu>6:
-            value_menu=int(input())
-
-        if value_menu==1:
-            print("-Voici les mots les moins importants")
+    # Boucle principale menu
+    flag = True
+    while flag:
+        print("\n--- Menu ---\n\n"
+                  "- Pour afficher les mots les moins importants, entrez 1\n"
+                  "- Pour afficher les mots les plus importants, entrez 2\n"
+                  "- Pour afficher le mot le plus important par Chirac, entrez 3\n"
+                  "- Pour afficher les présidents parlant de Nation, ainsi que celui qui en parle le plus, entrez 4\n"
+                  "- Pour afficher le président parlant en premier de l'écologie, entrez 5\n"
+                  "- Pour afficher tous les mots de tous les discours hormis les non-importants, entrez 6\n"
+                  "- Pour terminer, entrez 0\n")
+        value_menu = saisie()  # Saisie d'un caractère (nombre de 0 à 9)
+        if value_menu == 1:
+            print("\n- Voici les mots les moins importants\n")
             for i in range (len(mot_pas_important)):
                 print(mot_pas_important[i])
-        elif value_menu==2:
-            print("-Voici le mot le plus important du dossier :",mot_import_dossier)
+        elif value_menu == 2:
+            print("\n- Voici le mot le plus important du dossier :\n",mot_import_dossier)
         elif value_menu == 3:
-            print("-Voici le mot le plus important des discours de Chirac :",mot_import_chirac)
+            print("\n- Voici le mot le plus important des discours de Chirac : ",mot_import_chirac)
         elif value_menu == 4:
-            print("-Voici les présidents parlant de Nation")
+            print("\n- Voici les présidents parlant de Nation\n")
             for i in range(len(president_nation)):
                 print(president_nation[i])
-            print("-",presi_nation,"parle le plus de Nation")
+            print("\n-",presi_nation,"parle le plus de Nation")
         elif value_menu == 5:
-            print("-",president_ecolo, "est le président qui parle le plus d'écologie")
+            print("\n-",president_ecolo, "est le président qui parle le plus d'écologie\n")
         elif value_menu == 6:
-            print("-Voici tous les mots de tous les discours hormis les non-importants")
+            print("\n- Voici tous les mots de tous les discours hormis les non-importants\n")
             for i in range (len(mot_sans_non_important)):
                 print(mot_sans_non_important[i])
+        elif value_menu == 0:
+            flag = False
+            print("\nAu revoir...")
+        else:
+            print("Choix incorrect, retour au menu")
 
-        value_end_menu=int(input("-Voulez vous acceder de nouveau au menu, tappez 1 sinon 2\n"))
-
-    print("Fin de l'execution du programme")
-
-
-    question=input("Entre ta question")
-    question=ponctuation_str(minuscule(question))
-    mot_question=word_question(question)
-    print(mot_question)
-
-    mot_a_traiter=mot_important(mot_question,Matrice)
+    question=input("Entre ta question : ")
+    mot_question=word_question(ponctuation_str(minuscule(question)))
+    list_mot_important=mot_important(mot_question,Matrice)
+    dico_mot_cpt=scan_ligne(ponctuation_str(minuscule(question)))
+    cpt_question=cpt_mot_question(dico_mot_cpt)
+    print(dictionnaire_filtre_matrice(dico_mot_cpt,list_mot_important,cpt_question))
