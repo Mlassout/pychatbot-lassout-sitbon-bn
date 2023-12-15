@@ -14,14 +14,19 @@ if __name__=="__main__":
 
 
 
-    cleaned(files_names)
+    #cleaned(files_names)
 
     dictionnaire_mot = {}
     directory_cleaned = "./cleaned"
     dictionnaire_mot = cpt_word(directory_cleaned)
 
+    fichiers_dans_speeches = [f for f in os.listdir('./speeches') if f.endswith('.txt')]
 
-    dico_idf = score_idf_dico(dictionnaire_mot)
+    # Appel de la fonction de nettoyage
+    cleaned(fichiers_dans_speeches)
+
+
+    dico_idf = score_idf_dico(directory_cleaned)
 
     Matrice = []
 
@@ -189,7 +194,15 @@ if __name__=="__main__":
 
     question=input("Entre ta question : ")
     mot_question=word_question(ponctuation_str(minuscule(question)))
-    list_mot_important=mot_important(mot_question,Matrice)
+    print(mot_question)
+
+    Matrice_mot_important=mot_important(mot_question,Matrice)
+    print(Matrice_mot_important)
     dico_mot_cpt=scan_ligne(ponctuation_str(minuscule(question)))
     cpt_question=cpt_mot_question(dico_mot_cpt)
-    print(dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice))
+    #print(dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice))
+
+    print(croisement_mot_question_corpus(Matrice,dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice)))
+    Matrice_dimension_M=croisement_mot_question_corpus(Matrice,dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice))
+    dico=similarité(Matrice_mot_important,Matrice_dimension_M)
+    print(dico)
