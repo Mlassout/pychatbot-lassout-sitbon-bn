@@ -14,7 +14,7 @@ if __name__=="__main__":
 
 
 
-    #cleaned(files_names)
+    cleaned(files_names)
 
     dictionnaire_mot = {}
     directory_cleaned = "./cleaned"
@@ -25,8 +25,7 @@ if __name__=="__main__":
     # Appel de la fonction de nettoyage
     cleaned(fichiers_dans_speeches)
 
-
-    dico_idf = score_idf_dico(directory_cleaned)
+    dico_idf = score_idf_dico(dictionnaire_mot)
 
     Matrice = []
 

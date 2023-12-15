@@ -82,29 +82,29 @@ def ponctuation_str(l) : # entre en paramètre une chaine str
 # Fonction Cleaned avec suppression de la directory si existante
 # (permet plusieurs exécutions du programme sans suppression manuelle...)
 
-def cleaned(liste_fichiers):
-    # Suppression du répertoire "cleaned" s'il existe
-    if os.path.exists("./cleaned"):
-        for fichier in os.listdir("./cleaned"):
-            chemin_fichier = os.path.join("./cleaned", fichier)
-            os.remove(chemin_fichier)
-        os.rmdir("./cleaned")
 
-    os.mkdir('./cleaned/')  # Création du répertoire "cleaned"
+def cleaned(l): # entre en paramètre une liste comprenant le nom de fichier
+# --- Suppression de la directory cleaned si existante ------------------------------------------------------
+    if os.path.isdir("./cleaned"):
+        for f in os.listdir("./cleaned"):  # suppression des tous les fichiers du repertoire
+            # directory existe : à supprimer
+            os.remove(os.path.join("./cleaned", f))  # suppression fichiers du repertoire à vider
+        os.removedirs("./cleaned")
 
-    for nom_fichier in liste_fichiers:
-        chemin_entree = os.path.join('./speeches', nom_fichier)
-        chemin_sortie = os.path.join('./cleaned', "cleaned_" + nom_fichier)
+    os.mkdir('./cleaned/')  # création directory "cleaned"
+# -----------------------------------------------------------------------------------------------------------
+    txt=""
 
-        with open(chemin_entree, "r", encoding="utf-8") as f:
-            contenu = f.read()
-
-        # Application des fonctions de nettoyage
-        contenu_nettoye = ponctuation_str(minuscule(contenu))
-
-        # Écriture du contenu nettoyé dans le nouveau fichier
-        with open(chemin_sortie, 'w', encoding='utf-8') as p:
-            p.write(contenu_nettoye)
+    for i in range (len(l)): # parcour la liste donné en paramètre
+        nom_fichier = l[i] # stocke le nom du fichier dans une variable
+        with open('./speeches/'+nom_fichier,"r") as f: # ouvre le fichier présent dans la liste
+            contenu = f.readlines() # stocke le contenu du fichier
+            for j in range(len(contenu)):
+                txt+=contenu[j]    # on ajoute a chaque fois le contenu a txt
+            txt = ponctuation_str(minuscule(txt))# appelle la fonction ponctuation_str et minuscule pour le contenu du fichier
+            nom_fichier_cleaned = "cleaned_" + l[i] # modifie le nom du fichier initial afin de ne pas les confondre
+            with open('./cleaned/' + nom_fichier_cleaned, 'w') as p: # crée le fichier à partir du nom du fichier modifié
+                p.write(txt) # écrit dans ce fichier le contenu du fichier iniatial modifié par la fonction ponctuation_str et minuscule
 
 def scan_ligne(chaine):
 
@@ -126,16 +126,11 @@ def scan_ligne(chaine):
                     mot +="e"
                 else:
                     mot +="a"
-                if mot in dico :    # si le contenu de la variable mot est dans le dictionnaire on ajoute 1
-                    dico[mot]+=1
-                else:
-                    dico[mot]=1
             else:
-                if mot in dico :    # si le contenu de la variable mot est dans le dictionnaire on ajoute 1
+                if mot in dico:    # si le contenu de la variable mot est dans le dictionnaire on ajoute 1
                     dico[mot]+=1
                 else:
                     dico[mot]=1
-
             mot=""
 
     return dico
@@ -164,6 +159,9 @@ def cpt_word(directory):
 
 import math
 
+# fonction mot-->score idf
+
+def score_idf_dico(dictionnaire):
 
 def score_idf_dico(directory):     # Score IDF d'un mot, soit l'importance d'un mot dans un ensemble de texte
     TF = {}       # Création du dictionnaire IDF
@@ -199,7 +197,7 @@ def matrice_tfidf(directory):
     list_name=sorted(list_name)
     List.append("mot")
 
-    dico_IDF=score_idf_dico(directory)           # Calcul du score IDF pour chaque mot dans le répertoire
+    dico_IDF=score_idf_dico(cpt_word(directory))           # Calcul du score IDF pour chaque mot dans le répertoire
     all_word = cpt_word(directory)                  # Compte le nombre d'occurrences de chaque mot dans l'ensemble des documents
 
     if "" in all_word:                  # Supprime la clé vide s'il y en a une
@@ -208,7 +206,7 @@ def matrice_tfidf(directory):
     matrice = []                # Initialisation d'une matrice pour stocker les valeurs TF-IDF
     nbr_ligne = int(len(list_name)) + 1     # Nombre de lignes dans la matrice (nombre de mots + 1 pour les titres)
     for l in range(len(all_word) + 1):      # Crée une matrice remplie de zéros
-        ligne = [0] * nbr_ligne
+        ligne = ['0'] * nbr_ligne
         matrice.append(ligne)
     cpt = 1
 
@@ -222,20 +220,9 @@ def matrice_tfidf(directory):
             ligneTF =f.read()
             ligneTF = ligneTF.replace("\n", "")
             dico_TF=scan_ligne(ligneTF)             # Calcul des valeurs TF-IDF pour chaque mot dans le fichier
-            print("dicoTF",list_name[i])
-            print(dico_TF)
             for mots in dico_TF.keys():
                 if mots in dico_IDF:
                     dico_TFIDF[mots] = dico_IDF[mots]*dico_TF[mots]
-                    if mots == "veut":
-                        print(list_name[i])
-                        print(mots)
-                        print("idf=",dico_IDF[mots])
-                        print("Tf=",dico_TF[mots])
-                        print("produit=",dico_IDF[mots]*dico_TF[mots])
-            dico_TF.clear()
-
-
 
             matrice[0][i+1]=list_name[i]                # Remplissage de la première ligne de la matrice avec les noms de fichiers
 
@@ -245,8 +232,6 @@ def matrice_tfidf(directory):
                     if mot == matrice[h][0]:
 
                         matrice[h][i+1]=dico_TFIDF[mot]
-            dico_TFIDF.clear()
-
 
     return matrice
 
@@ -318,6 +303,14 @@ def cpt_mot_question(dico):
     for nombre in dico.values():
         cpt_total+=nombre
     return cpt_total
+
+'''def dictionnaire_filtre_matrice(dico,list,nbr_de_mot):
+    dictionnaire={}
+    for mot in dico.keys():
+        if mot in list:
+            dictionnaire[mot]=dico[mot]/nbr_de_mot
+
+    return dictionnaire'''
 
 
 def dictionnaire_filtre_matrice(dico,nbr_de_mot,matrice):
