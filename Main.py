@@ -202,6 +202,7 @@ if __name__=="__main__":
     cpt_question=cpt_mot_question(dico_mot_cpt)
     #print(dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice))
 
+
     print(croisement_mot_question_corpus(Matrice,dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice)))
     Matrice_dimension_M=croisement_mot_question_corpus(Matrice,dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice))
     dico=similarité(Matrice_mot_important,Matrice_dimension_M)

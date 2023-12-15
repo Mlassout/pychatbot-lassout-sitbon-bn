@@ -363,6 +363,7 @@ def croisement_mot_question_corpus(Matrice,dico):
             if mot == Matrice[i][0]:
                 Matrice_dimension_M.append(Matrice[i])
 
+
     return Matrice_dimension_M
 
 
