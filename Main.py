@@ -25,7 +25,7 @@ if __name__=="__main__":
     # Appel de la fonction de nettoyage
     cleaned(fichiers_dans_speeches)
 
-    dico_idf = score_idf_dico(dictionnaire_mot)
+    dico_idf = score_idf_dico(directory_cleaned)
 
     Matrice = []
 
