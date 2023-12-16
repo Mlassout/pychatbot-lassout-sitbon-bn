@@ -196,7 +196,7 @@ if __name__=="__main__":
     #compteur mot apparition
     dico_mot_cpt=scan_ligne(ponctuation_str(minuscule(question)))
     cpt_question=cpt_mot_question(dico_mot_cpt)
-    #-----------------------
+
     Matrice_question_filtre=Matrice_filtre_matrice(dico_mot_cpt,Matrice)
 
     Matrice_dimension_question=croisement_mot_question_corpus(Matrice,Matrice_question_filtre)
