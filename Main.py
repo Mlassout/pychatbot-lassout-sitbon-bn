@@ -1,3 +1,4 @@
+#15/12 23h
 from function import *
 
 if __name__=="__main__":
@@ -9,7 +10,6 @@ if __name__=="__main__":
 
     last_list = new_list(files_names)
     last_list_colonne=sorted(last_list)
-    liste_president = []
     liste_president = supp_doublons(last_list)
 
 
@@ -26,8 +26,6 @@ if __name__=="__main__":
     cleaned(fichiers_dans_speeches)
 
     dico_idf = score_idf_dico(directory_cleaned)
-
-    Matrice = []
 
     Matrice = matrice_tfidf(directory_cleaned)
 
@@ -193,16 +191,17 @@ if __name__=="__main__":
 
     question=input("Entre ta question : ")
     mot_question=word_question(ponctuation_str(minuscule(question)))
-    print(mot_question)
-
     Matrice_mot_important=mot_important(mot_question,Matrice)
-    print(Matrice_mot_important)
+
+    #compteur mot apparition
     dico_mot_cpt=scan_ligne(ponctuation_str(minuscule(question)))
     cpt_question=cpt_mot_question(dico_mot_cpt)
-    #print(dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice))
+    #-----------------------
+    Matrice_question_filtre=Matrice_filtre_matrice(dico_mot_cpt,Matrice)
 
+    Matrice_dimension_question=croisement_mot_question_corpus(Matrice,Matrice_question_filtre)
 
-    print(croisement_mot_question_corpus(Matrice,dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice)))
-    Matrice_dimension_M=croisement_mot_question_corpus(Matrice,dictionnaire_filtre_matrice(dico_mot_cpt,cpt_question,Matrice))
-    dico=similarité(Matrice_mot_important,Matrice_dimension_M)
-    print(dico)
+    #sûr
+
+    dico_similarite=similarité(Matrice_question_filtre,Matrice_dimension_question)
+    print(dico_similarite)

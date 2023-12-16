@@ -1,5 +1,8 @@
+#15/12 23h
+
 import os  # utilisé pour naviguer dans l'os
 import random # importer une possibilité de faire une fonction aléatoire
+import math #module maths utilisé pour le TF-IDF
 
 # fonction qui permet de récuperer le nom des fichiers d'un dossier donné
 def list_of_files(directory, extension): # entre en paramètre le nom du dossier et le type de fichier à récupérer
@@ -162,9 +165,6 @@ def cpt_word(directory):
 
 
 
-import math
-
-
 def score_idf_dico(directory):     # Score IDF d'un mot, soit l'importance d'un mot dans un ensemble de texte
     TF = {}       # Création du dictionnaire IDF
     dico={}
@@ -222,20 +222,10 @@ def matrice_tfidf(directory):
             ligneTF =f.read()
             ligneTF = ligneTF.replace("\n", "")
             dico_TF=scan_ligne(ligneTF)             # Calcul des valeurs TF-IDF pour chaque mot dans le fichier
-            print("dicoTF",list_name[i])
-            print(dico_TF)
             for mots in dico_TF.keys():
                 if mots in dico_IDF:
                     dico_TFIDF[mots] = dico_IDF[mots]*dico_TF[mots]
-                    if mots == "veut":
-                        print(list_name[i])
-                        print(mots)
-                        print("idf=",dico_IDF[mots])
-                        print("Tf=",dico_TF[mots])
-                        print("produit=",dico_IDF[mots]*dico_TF[mots])
             dico_TF.clear()
-
-
 
             matrice[0][i+1]=list_name[i]                # Remplissage de la première ligne de la matrice avec les noms de fichiers
 
@@ -320,7 +310,7 @@ def cpt_mot_question(dico):
     return cpt_total
 
 
-def dictionnaire_filtre_matrice(dico,nbr_de_mot,matrice):
+'''def dictionnaire_filtre_matrice(dico,nbr_de_mot,matrice):
     somme=0
     dictionnaire={}
     for mot in dico.keys():
@@ -330,46 +320,65 @@ def dictionnaire_filtre_matrice(dico,nbr_de_mot,matrice):
                     somme+=int(matrice[i][j])
                 dictionnaire[mot]=(dico[mot]/nbr_de_mot)*(somme/(len(matrice[i])-1))
 
-    return dictionnaire
+    return dictionnaire'''
 
+def Matrice_filtre_matrice(dico,matrice):
+    somme=0
+    Matrice=[]
+    for mot in dico.keys():
+        for i in range(len(matrice)):
+            if matrice[i][0] == mot:
+                L=[]
+                for j in range(1,len(matrice[i])):
+                    somme+=int(matrice[i][j])
+
+                TF_IDF=(dico[mot])*(somme/(len(matrice[i])-1))
+                L.append(mot)
+                L.append(TF_IDF)
+                Matrice.append(L)
+    return Matrice
 
 #Calcul similarité deux vecteurs
 
-def produit_scalaire(A,B):
+def produit_scalaire(A,B,colonne_A,colonne_B):
     somme=0
-    for i in range (0,len(A)):
-        somme+=A*B
+    print(A)
+    for i in range (1,len(A)):
+        print(A[i][colonne_A],"ceci est A")
+        somme+=A[i][colonne_A]*B[i][colonne_B]
 
     return somme
 
 
-def norme_vecteur (A):
+def norme_vecteur (A,colonne):
     somme=0
-    for i in range (0,len(A)):
-        somme+=A**2
+    for i in range (1,len(A)):
+        somme+=A[colonne][i]**2
     somme=somme**0,5
 
     return somme
 
-def calcul_similarité(A,B,M):
-    score=produit_scalaire(A,B)/(norme_vecteur(A)*norme_vecteur(B,M))
+def calcul_similarité(A,B,colonne_A,colonne_B):
+
+    score=produit_scalaire(A,B,colonne_A,colonne_B)/(norme_vecteur(A,colonne_A)*norme_vecteur(B,colonne_B))
     return score
 
-def croisement_mot_question_corpus(Matrice,dico):
+def croisement_mot_question_corpus(Matrice_corpus,Matrice_question):
     Matrice_dimension_M=[]
-    Matrice_dimension_M.append(Matrice[0])
-    for mot in dico.keys():
-        for i in range(len(Matrice)):
-            if mot == Matrice[i][0]:
-                Matrice_dimension_M.append(Matrice[i])
+    Matrice_dimension_M.append(Matrice_corpus[0])
+    for h in range (len(Matrice_question)):
+        for i in range(len(Matrice_corpus)):
+            if Matrice_question[h][0] == Matrice_corpus[i][0]:
+                Matrice_dimension_M.append(Matrice_corpus[i])
 
     return Matrice_dimension_M
 
 
 
-def similarité(Matrice_question,Matrice_corpus):
+def similarité(Matrice_question_M,Matrice_corpus_M):
     dictionnaire_vecteur_similarite={}
-    for i in range (1,len(Matrice_corpus[0])):
-        score_similarite=calcul_similarité(Matrice_question,Matrice_corpus,len(Matrice_corpus)-1)
-        dictionnaire_vecteur_similarite[Matrice_corpus[0][i]]=score_similarite
+    for i in range (1,len(Matrice_corpus_M[0])):
+        for k in range (1,len(Matrice_question_M[0])):
+            score_similarite=calcul_similarité(Matrice_question_M,Matrice_corpus_M,k,i)
+            dictionnaire_vecteur_similarite[Matrice_corpus_M[0][i]+" "+i]=score_similarite
     return dictionnaire_vecteur_similarite
