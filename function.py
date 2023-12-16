@@ -310,21 +310,11 @@ def cpt_mot_question(dico):
     return cpt_total
 
 
-'''def dictionnaire_filtre_matrice(dico,nbr_de_mot,matrice):
-    somme=0
-    dictionnaire={}
-    for mot in dico.keys():
-        for i in range(len(matrice)):
-            if matrice[i][0] == mot:
-                for j in range(1,len(matrice[i])):
-                    somme+=int(matrice[i][j])
-                dictionnaire[mot]=(dico[mot]/nbr_de_mot)*(somme/(len(matrice[i])-1))
-
-    return dictionnaire'''
-
 def Matrice_filtre_matrice(dico,matrice):
     somme=0
     Matrice=[]
+    ligne_0 = [0, "Question"]
+    Matrice.append(ligne_0)
     for mot in dico.keys():
         for i in range(len(matrice)):
             if matrice[i][0] == mot:
@@ -340,32 +330,53 @@ def Matrice_filtre_matrice(dico,matrice):
 
 #Calcul similarité deux vecteurs
 
+
+
+
 def produit_scalaire(A,B,colonne_A,colonne_B):
     somme=0
-    print(A)
     for i in range (1,len(A)):
-        print(A[i][colonne_A],"ceci est A")
         somme+=A[i][colonne_A]*B[i][colonne_B]
 
     return somme
 
 
-def norme_vecteur (A,colonne):
-    somme=0
-    for i in range (1,len(A)):
-        somme+=A[colonne][i]**2
-    somme=somme**0,5
+def norme_vecteur(A, colonne):
+    somme = 0
+    for i in range(1,len(A)):
+        somme += A[i][colonne]**2
+    somme = somme**0.5
 
     return somme
 
-def calcul_similarité(A,B,colonne_A,colonne_B):
+def calcul_similarite(A, B, colonne_A, colonne_B):
+    """
+    Calcule la similarité (cosinus) entre deux vecteurs.
 
-    score=produit_scalaire(A,B,colonne_A,colonne_B)/(norme_vecteur(A,colonne_A)*norme_vecteur(B,colonne_B))
-    return score
+    Args:
+    A, B (list): Deux listes représentant les vecteurs.
+    colonne_A, colonne_B (int): Indices des colonnes à utiliser dans les vecteurs A et B.
+
+    Returns:
+    float: Similarité cosinus entre les vecteurs A et B.
+    """
+    produit_normes = norme_vecteur(A, colonne_A) * norme_vecteur(B, colonne_B)
+
+    if produit_normes == 0:
+
+        return 0  # Éviter la division par zéro
+    return produit_scalaire(A, B, colonne_A, colonne_B) / produit_normes
+
+def similarite(Matrice_question_M, Matrice_corpus_M):
+    dictionnaire_vecteur_similarite = {}
+    for i in range(1, len(Matrice_corpus_M[0])):
+        score_similarite = calcul_similarite(Matrice_question_M, Matrice_corpus_M, 1, i)
+        dictionnaire_vecteur_similarite[Matrice_corpus_M[0][i]] = score_similarite  # Arrondi pour correspondre au format souhaité
+    return dictionnaire_vecteur_similarite
+
 
 def croisement_mot_question_corpus(Matrice_corpus,Matrice_question):
     Matrice_dimension_M=[]
-    Matrice_dimension_M.append(Matrice_corpus[0])
     for h in range (len(Matrice_question)):
         for i in range(len(Matrice_corpus)):
             if Matrice_question[h][0] == Matrice_corpus[i][0]:
@@ -373,12 +384,21 @@ def croisement_mot_question_corpus(Matrice_corpus,Matrice_question):
 
     return Matrice_dimension_M
 
+def fichier_similarité(dico):
+    L=[]
+    for valeur in dico.value():
+        L.append(valeur)
+    for i in range (len(L)-1):
+        if L[i]>L[i+1]:
+            valeur_plus_petite=L[i]
+    for fichier in dico.keys():
+        if dico[fichier]==valeur_plus_petite:
+            return fichier
 
+def fichier_clean_vers_speach(fichier):
+    fichier=fichier[9:]
+    return fichier
 
-def similarité(Matrice_question_M,Matrice_corpus_M):
-    dictionnaire_vecteur_similarite={}
-    for i in range (1,len(Matrice_corpus_M[0])):
-        for k in range (1,len(Matrice_question_M[0])):
-            score_similarite=calcul_similarité(Matrice_question_M,Matrice_corpus_M,k,i)
-            dictionnaire_vecteur_similarite[Matrice_corpus_M[0][i]+" "+i]=score_similarite
-    return dictionnaire_vecteur_similarite
+def le_mot_important_question(Matrice_question):
+    for i in range(len(Matrice_question)):
+        break

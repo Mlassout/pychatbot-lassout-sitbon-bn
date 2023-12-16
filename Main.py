@@ -201,7 +201,5 @@ if __name__=="__main__":
 
     Matrice_dimension_question=croisement_mot_question_corpus(Matrice,Matrice_question_filtre)
 
-    #sûr
-
-    dico_similarite=similarité(Matrice_question_filtre,Matrice_dimension_question)
+    dico_similarite=similarite(Matrice_question_filtre,Matrice_dimension_question)
     print(dico_similarite)
