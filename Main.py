@@ -1,4 +1,4 @@
-#16/12 1h
+#16/12 17h
 from function import *
 
 if __name__=="__main__":
@@ -32,44 +32,37 @@ if __name__=="__main__":
     for i in range (len(Matrice )):
         print(Matrice[i])
 
-
-
-
     mot_pas_important=[]
-    somme_tfidf=0
-    for j in range(2,len(Matrice)):
-        TF_IDF=int(Matrice[j][1])
+    for j in range(1,len(Matrice)):
+        TF_IDF=Matrice[j][1]
         if TF_IDF==0:
             somme_tfidf=0
             for k in range(2,9):
-                somme_tfidf+=int(Matrice[j][k])
+                somme_tfidf+=Matrice[j][k]
             if somme_tfidf==0:
-
                 mot_pas_important.append(Matrice[j][0])
 
-    indice_high_idf=0
-    for i in range(2, len(Matrice)-1):
-        for j in range (2,9):
-            if int(Matrice[i][j])<int(Matrice[i+1][j]):
-                indice_high_idf=i+1
+    # Initialiser les variables pour stocker le mot avec le score le plus élevé
+    score_le_plus_eleve = 0
+    mot_import_dossier = ""
 
-    mot_import_dossier=Matrice[indice_high_idf][0]
+    # Itération sur chaque ligne et chaque colonne de la matrice (en ignorant la première ligne et la première colonne)
+    for i in range(1, len(Matrice)):
+        for j in range(1, len(Matrice[i])):
+            if Matrice[i][j] > score_le_plus_eleve:
+                score_le_plus_eleve = Matrice[i][j]
+                mot_import_dossier = Matrice[i][0]
 
+    # Initialiser les variables pour stocker le mot avec le score le plus élevé
+    score_le_plus_eleve = 0
+    mot_import_chirac = ""
 
-    list_indice_mot=[]
-
-    for i in range(2, len(Matrice) - 1):
-        for j in range(2, 9):
-            if int(Matrice[i][j]) < int(Matrice[i + 1][j]):
-                indice_high_idf = i+1
-        list_indice_mot.append(indice_high_idf)
-
-
-    if list_indice_mot[0]<list_indice_mot[1]:
-        mot_import_chirac=Matrice[list_indice_mot[1]] [0]
-    else:
-        mot_import_chirac = Matrice[list_indice_mot[0]][0]
-
+    # Itération sur chaque ligne et chaque colonne de la matrice (en ignorant la première ligne et la première colonne)
+    for i in range(1, len(Matrice)):
+        for j in range(1, 3):
+            if Matrice[i][j] > score_le_plus_eleve:
+                score_le_plus_eleve = Matrice[i][j]
+                mot_import_chirac = Matrice[i][0]
 
     president_nation=[]
     indice_mot_nation=0
@@ -129,15 +122,17 @@ if __name__=="__main__":
 
     indice_ecologie=0
     for i in range (len(Matrice)):
-        if Matrice[i][0]=="écologie":
+        if Matrice[i][0]=="climat":
             indice_ecologie=i
+            break
 
-    indice_ecologie_president=0
-    for j in range (2,8):
-        if Matrice[indice_ecologie][j]<Matrice[indice_ecologie][j+1]:
-            indice_ecologie_president=j
-        else:
-            indice_ecologie_president=j
+    # Trouver le score le plus élevé pour 'climat'
+    score_max = 0
+    indice_ecologie_president = 0
+    for j in range(1, len(Matrice[indice_ecologie])):
+        if Matrice[indice_ecologie][j] > score_max:
+            score_max = Matrice[indice_ecologie][j]
+            indice_ecologie_president = j
 
     president_ecolo=""
     if indice_ecologie_president==1 or indice_ecologie_president==2 :
@@ -160,10 +155,9 @@ if __name__=="__main__":
                   "- Pour afficher les mots les plus importants, entrez 2\n"
                   "- Pour afficher le mot le plus important par Chirac, entrez 3\n"
                   "- Pour afficher les présidents parlant de Nation, ainsi que celui qui en parle le plus, entrez 4\n"
-                  "- Pour afficher le président parlant en premier de l'écologie, entrez 5\n"
-                  "- Pour afficher tous les mots de tous les discours hormis les non-importants, entrez 6\n"
-                  "- Pour terminer, entrez 0\n")
-        value_menu = saisie()  # Saisie d'un caractère (nombre de 0 à 9)
+                  "- Pour afficher le président parlant le plus de l'écologie, entrez 5\n"
+                  "- Pour acceder au bot, entrez 0\n")
+        value_menu = saisie()  # Saisie d'un caractère (nombre de 0 à 5)
         if value_menu == 1:
             print("\n- Voici les mots les moins importants\n")
             for i in range (len(mot_pas_important)):
@@ -178,38 +172,55 @@ if __name__=="__main__":
                 print(president_nation[i])
             print("\n-",presi_nation,"parle le plus de Nation")
         elif value_menu == 5:
-            print("\n-",president_ecolo, "est le président qui parle le plus d'écologie\n")
-        elif value_menu == 6:
-            print("\n- Voici tous les mots de tous les discours hormis les non-importants\n")
-            for i in range (len(mot_sans_non_important)):
-                print(mot_sans_non_important[i])
+            print("\n-",president_ecolo, "est le président qui parle le plus du climat\n")
         elif value_menu == 0:
             flag = False
-            print("\nAu revoir...")
         else:
             print("Choix incorrect, retour au menu")
 
-    question=input("Entre ta question : ")
-    mot_question=word_question(ponctuation_str(minuscule(question)))
-    Matrice_mot_important=mot_important(mot_question,Matrice)
-
-    #compteur mot apparition
-    dico_mot_cpt=scan_ligne(ponctuation_str(minuscule(question)))
-    cpt_question=cpt_mot_question(dico_mot_cpt)
-
-    Matrice_question_filtre=Matrice_filtre_matrice(dico_mot_cpt,Matrice)
-
-    Matrice_dimension_question=croisement_mot_question_corpus(Matrice,Matrice_question_filtre)
-
-    dico_similarite=similarite(Matrice_question_filtre,Matrice_dimension_question)
 
 
-    fichier_plus_grand_similarite=fichier_similarite(dico_similarite)
-    fichier_speech_etude=fichier_clean_vers_speach(fichier_plus_grand_similarite)
+    while True:
+        #saisie de la question de l'utilisateur qui doit avoir au moins deux étant présent dans le corpus
+        boucle=True
+
+        while boucle==True:
+
+            question=input(" - Si vous souhaitez sortir du programme entrez 0\n - Entre ta question : ")
 
 
-    mot_a_chercher=le_mot_important_question(Matrice_question_filtre)
+            dico_mot_cpt = scan_ligne(ponctuation_str(minuscule(question)))
+            cpt_question = cpt_mot_question(dico_mot_cpt)
 
-    print(phrase_prompt(fichier_speech_etude,mot_a_chercher))
+            mot_question=word_question(ponctuation_str(minuscule(question)))
+            Matrice_mot_important=mot_important(mot_question,Matrice)
+            if len(Matrice_mot_important)<2 and question!="0":
+                print("Erreur : Veuillez entrez au moins deux moins étant impactant ma recherche de réponse.")
+                boucle=True
+            else:
+                boucle=False
+            if question=="0":
+                flag=True
+                break
+        if flag==True:
+            print("\nAu revoir...")
+            break
 
-    #Peux-tu me dire comment une nation peut-elle prendre soin du climat ?
+
+
+        #création de la Matrice des corpus de même dimension que celle de la question
+        Matrice_question_filtre=Matrice_filtre_matrice(dico_mot_cpt,Matrice)
+        Matrice_dimension_question=croisement_mot_question_corpus(Matrice,Matrice_question_filtre)
+
+        #détermination du fichier étant le plus similaire à la question
+        dico_similarite=similarite(Matrice_question_filtre,Matrice_dimension_question)
+        fichier_plus_grand_similarite=fichier_similarite(dico_similarite)
+        fichier_speech_etude=fichier_clean_vers_speach(fichier_plus_grand_similarite)
+
+        """
+        Création de la réponse à la question en cherchant la première phrase possédant
+        le mot le plus impactant de la question dans le corpus.
+        """
+        mot_a_chercher=le_mot_important_question(Matrice_question_filtre)
+        reponse=phrase_prompt(fichier_speech_etude,mot_a_chercher)
+        print(reponse_affinee(question,reponse)+"\n")

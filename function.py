@@ -1,4 +1,4 @@
-#16/12 1h
+#16/12 17h
 
 import os  # utilisé pour naviguer dans l'os
 import random # importer une possibilité de faire une fonction aléatoire
@@ -254,15 +254,15 @@ def saisie():
 
        La fonction utilise une boucle pour garantir une saisie correcte et valide.
        Si l'entrée contient plus d'un caractère, la fonction ignore l'entrée et continue la boucle.
-       Si l'entrée est un nombre entre 0 et 9, la fonction renvoie cette valeur sous forme d'entier.
+       Si l'entrée est un nombre entre 0 et 5, la fonction renvoie cette valeur sous forme d'entier.
        '''
     flag = True
     entree = ""
     while flag:
-        entree = input("Entrer un nombre compris entre 0 et 9 : ")
+        entree = input("Entrer un nombre compris entre 0 et 5 : ")
         if len(entree) > 1:
             break
-        elif ord(entree) > 47 and ord(entree) < 58: # l'entree est un nombre compris entre 0 et 9
+        elif ord(entree) > 47 and ord(entree) < 53: # l'entree est un nombre compris entre 0 et 9
             return int(entree)
 
 
@@ -350,16 +350,16 @@ def norme_vecteur(A, colonne):
     return somme
 
 def calcul_similarite(A, B, colonne_A, colonne_B):
-    """
-    Calcule la similarité (cosinus) entre deux vecteurs.
+
+    """Calcule la similarité (cosinus) entre deux vecteurs.
 
     Args:
     A, B (list): Deux listes représentant les vecteurs.
     colonne_A, colonne_B (int): Indices des colonnes à utiliser dans les vecteurs A et B.
 
     Returns:
-    float: Similarité cosinus entre les vecteurs A et B.
-    """
+    float: Similarité cosinus entre les vecteurs A et B."""
+
     produit_normes = norme_vecteur(A, colonne_A) * norme_vecteur(B, colonne_B)
 
     if produit_normes == 0:
@@ -408,7 +408,7 @@ def phrase_prompt(fichier_speech,mot):
     phrase_x=""
     with open("./speeches/"+fichier_speech,"r") as f:
         contenu=f.read()
-        contenu=contenu.replace("\n","")
+        contenu=contenu.replace("\n"," ")
         for i in range (len(contenu)):
             if contenu[i]!=chr(46):
                 phrase_1+=contenu[i]
@@ -421,15 +421,26 @@ def phrase_prompt(fichier_speech,mot):
         if mot in phrase_1:
             return phrase_1
         if mot_maj in phrase_1:
-            return phrase_1+chr(46)
+            return phrase_1.lower()+chr(46)
         else:
             for i in range(len(phrase_1),len(contenu)):
                 if contenu[i]!=chr(46):
                     phrase_x+=contenu[i]
                 else:
                     if mot in phrase_x:
-                        return phrase_x
+                        return phrase_x.lower()+chr(46)
                     if mot_maj in phrase_x:
-                        return phrase_x+chr(46)
+                        return phrase_x.lower()+chr(46)
                     else:
                         phrase_x=""
+
+
+def reponse_affinee(question,reponse):
+    dico_mot_interrogation={"Comment": "Après analyse,",
+                            "Pourquoi": "Car,",
+                            "Peux-tu": "Oui, bien sûr,",
+                            "Combien":"Désolé mais il est difficile de quantifier,"}
+    for interrogation in dico_mot_interrogation.keys():
+        if interrogation in question:
+            reponse_complete=dico_mot_interrogation[interrogation]+reponse
+            return reponse_complete
