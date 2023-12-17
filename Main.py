@@ -1,4 +1,4 @@
-#15/12 23h
+#16/12 1h
 from function import *
 
 if __name__=="__main__":
@@ -202,4 +202,14 @@ if __name__=="__main__":
     Matrice_dimension_question=croisement_mot_question_corpus(Matrice,Matrice_question_filtre)
 
     dico_similarite=similarite(Matrice_question_filtre,Matrice_dimension_question)
-    print(dico_similarite)
+
+
+    fichier_plus_grand_similarite=fichier_similarite(dico_similarite)
+    fichier_speech_etude=fichier_clean_vers_speach(fichier_plus_grand_similarite)
+
+
+    mot_a_chercher=le_mot_important_question(Matrice_question_filtre)
+
+    print(phrase_prompt(fichier_speech_etude,mot_a_chercher))
+
+    #Peux-tu me dire comment une nation peut-elle prendre soin du climat ?

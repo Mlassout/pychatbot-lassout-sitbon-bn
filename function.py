@@ -1,4 +1,4 @@
-#15/12 23h
+#16/12 1h
 
 import os  # utilisé pour naviguer dans l'os
 import random # importer une possibilité de faire une fonction aléatoire
@@ -384,21 +384,52 @@ def croisement_mot_question_corpus(Matrice_corpus,Matrice_question):
 
     return Matrice_dimension_M
 
-def fichier_similarité(dico):
-    L=[]
-    for valeur in dico.value():
-        L.append(valeur)
-    for i in range (len(L)-1):
-        if L[i]>L[i+1]:
-            valeur_plus_petite=L[i]
-    for fichier in dico.keys():
-        if dico[fichier]==valeur_plus_petite:
-            return fichier
+def fichier_similarite(dico):
+    valeur_la_plus_grande = max(dico.values())  # Trouver la plus grande valeur
+    for fichier, valeur in dico.items():
+        if valeur == valeur_la_plus_grande:
+            return fichier  # Retourner le fichier correspondant
 
 def fichier_clean_vers_speach(fichier):
-    fichier=fichier[9:]
+    fichier=fichier[8:]
     return fichier
 
 def le_mot_important_question(Matrice_question):
-    for i in range(len(Matrice_question)):
-        break
+    for i in range(1,len(Matrice_question)-1):
+        if Matrice_question[i][1]>Matrice_question[i+1][1]:
+            indice_i=i
+        else:
+            indice_i=i+1
+    mot_impactant=Matrice_question[indice_i][0]
+    return mot_impactant
+
+def phrase_prompt(fichier_speech,mot):
+    phrase_1=""
+    phrase_x=""
+    with open("./speeches/"+fichier_speech,"r") as f:
+        contenu=f.read()
+        contenu=contenu.replace("\n","")
+        for i in range (len(contenu)):
+            if contenu[i]!=chr(46):
+                phrase_1+=contenu[i]
+            else:
+                break
+        lettre = mot[0]
+        lettre_majuscule = lettre.upper()
+        mot_maj= lettre_majuscule + mot[1:]
+
+        if mot in phrase_1:
+            return phrase_1
+        if mot_maj in phrase_1:
+            return phrase_1
+        else:
+            for i in range(len(phrase_1),len(contenu)):
+                if contenu[i]!=chr(46):
+                    phrase_x+=contenu[i]
+                else:
+                    if mot in phrase_x:
+                        return phrase_x
+                    if mot_maj in phrase_x:
+                        return phrase_x
+                    else:
+                        phrase_x=""
