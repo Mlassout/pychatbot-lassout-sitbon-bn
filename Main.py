@@ -1,4 +1,4 @@
-#16/12 17h
+#16/12 23h
 from function import *
 
 if __name__=="__main__":
@@ -30,8 +30,8 @@ if __name__=="__main__":
     Matrice = matrice_tfidf(directory_cleaned)
 
     #Pour afficher la matrice
-    #for i in range (len(Matrice )):
-    #    print(Matrice[i])
+    for i in range (len(Matrice )):
+        print(Matrice[i])
 
     mot_pas_important=[]
     for j in range(1,len(Matrice)):
@@ -196,7 +196,7 @@ if __name__=="__main__":
             mot_question=word_question(ponctuation_str(minuscule(question)))
             Matrice_mot_important=mot_important(mot_question,Matrice)
             if len(Matrice_mot_important)<2 and question!="0":
-                print("Erreur : Veuillez entrez au moins deux moins étant impactant ma recherche de réponse.")
+                print("\nErreur : Veuillez entrez une question plus précise\n")
                 boucle=True
             else:
                 boucle=False
@@ -210,7 +210,7 @@ if __name__=="__main__":
 
 
         #création de la Matrice des corpus de même dimension que celle de la question
-        Matrice_question_filtre=Matrice_filtre_matrice(dico_mot_cpt,Matrice)
+        Matrice_question_filtre=Matrice_filtre_matrice(dico_mot_cpt,Matrice,dico_idf)
         Matrice_dimension_question=croisement_mot_question_corpus(Matrice,Matrice_question_filtre)
 
         #détermination du fichier étant le plus similaire à la question
@@ -224,4 +224,52 @@ if __name__=="__main__":
         """
         mot_a_chercher=le_mot_important_question(Matrice_question_filtre)
         reponse=phrase_prompt(fichier_speech_etude,mot_a_chercher)
-        print(reponse_affinee(question,reponse)+"\n")
+        print(mot_a_chercher)
+        print(fichier_speech_etude)
+        reponse_bot=reponse_affinee(question,reponse)
+        if reponse_bot==None:
+            print("\nErreur : Veuillez entrez une question plus précise\n")
+        else:
+            print("\n - Voilà ma reponse :\n"+reponse_bot+"\n")
+
+
+#menu fenetre
+
+
+# Création de la fenêtre principale
+window = tk.Tk()
+window.title("Menu")
+window.geometry("800x600")
+
+
+# Création des widgets pour la saisie de texte
+zone_texte = tk.Text(window, height=5, width=50)
+zone_texte.pack()
+
+# Création des boutons
+btn_sauvegarder_texte = tk.Button(window, text="Sauvegarder le texte", command=lambda: sauvegarder_texte(zone_texte))
+btn_sauvegarder_texte.pack()
+
+btn_afficher_texte = tk.Button(window, text="Afficher le texte sauvegardé", command=afficher_texte_sauvegarde)
+btn_afficher_texte.pack()
+
+btn_moins_importants = tk.Button(window, text="Afficher les mots les moins importants", command=lambda: afficher_mots_moins_importants(mot_import_dossier))
+btn_plus_importants = tk.Button(window, text="Afficher les mots les plus importants", command=lambda: afficher_mots_plus_importants(mot_important))
+btn_plus_importants_Chirac = tk.Button(window, text="Afficher le mot le plus important de Chirac", command=lambda: afficher_mots_plus_importants_Chirac(mot_import_chirac))
+btn_nation = tk.Button(window, text="Afficher les présidents parlant de Nation", command=lambda: afficher_presi_nation(president_nation, presi_nation))
+btn_ecolo = tk.Button(window, text="Afficher le président parlant en premier de l'écologie", command=lambda: afficher_presi_ecolo(president_ecolo))
+btn_quitter = tk.Button(window, text="Quitter", command=lambda: quitter(window))
+
+btn_quitter.pack()
+btn_moins_importants.pack()
+btn_plus_importants.pack()
+btn_plus_importants_Chirac.pack()
+btn_ecolo.pack()
+btn_nation.pack()
+btn_quitter.pack()
+
+#logo_image = PhotoImage(file="/Users/marc-antoine/PycharmProjects/IVANA/venv/chatbof_animation.gif")
+#logo_label = tk.Label(window, image=logo_image)
+#logo_label.pack()
+
+window.mainloop()

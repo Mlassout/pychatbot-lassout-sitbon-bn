@@ -1,8 +1,10 @@
-#16/12 17h
+#16/12 23h
 
 import os  # utilisé pour naviguer dans l'os
 import random # importer une possibilité de faire une fonction aléatoire
 import math #module maths utilisé pour le TF-IDF
+import tkinter as tk
+from tkinter import messagebox, scrolledtext ,PhotoImage,Canvas
 
 # fonction qui permet de récuperer le nom des fichiers d'un dossier donné
 def list_of_files(directory, extension): # entre en paramètre le nom du dossier et le type de fichier à récupérer
@@ -310,8 +312,7 @@ def cpt_mot_question(dico):
     return cpt_total
 
 
-def Matrice_filtre_matrice(dico,matrice):
-    somme=0
+def Matrice_filtre_matrice(dico,matrice,dico_idf):
     Matrice=[]
     ligne_0 = [0, "Question"]
     Matrice.append(ligne_0)
@@ -319,13 +320,12 @@ def Matrice_filtre_matrice(dico,matrice):
         for i in range(len(matrice)):
             if matrice[i][0] == mot:
                 L=[]
-                for j in range(1,len(matrice[i])):
-                    somme+=int(matrice[i][j])
-
-                TF_IDF=(dico[mot])*(somme/(len(matrice[i])-1))
+                TF_IDF=dico[mot]*dico_idf[mot]
                 L.append(mot)
                 L.append(TF_IDF)
                 Matrice.append(L)
+
+        print(Matrice)
     return Matrice
 
 #Calcul similarité deux vecteurs
@@ -385,6 +385,7 @@ def croisement_mot_question_corpus(Matrice_corpus,Matrice_question):
     return Matrice_dimension_M
 
 def fichier_similarite(dico):
+    print(dico)
     valeur_la_plus_grande = max(dico.values())  # Trouver la plus grande valeur
     for fichier, valeur in dico.items():
         if valeur == valeur_la_plus_grande:
@@ -404,6 +405,7 @@ def le_mot_important_question(Matrice_question):
     return mot_impactant
 
 def phrase_prompt(fichier_speech,mot):
+    chaine_ponctuation=" -,?:;.'()"
     phrase_1=""
     phrase_x=""
     with open("./speeches/"+fichier_speech,"r") as f:
@@ -414,33 +416,94 @@ def phrase_prompt(fichier_speech,mot):
                 phrase_1+=contenu[i]
             else:
                 break
-        lettre = mot[0]
-        lettre_majuscule = lettre.upper()
-        mot_maj= lettre_majuscule + mot[1:]
 
-        if mot in phrase_1:
-            return phrase_1
-        if mot_maj in phrase_1:
-            return phrase_1.lower()+chr(46)
+        if mot in minuscule(ponctuation_str(phrase_1)):
+            if minuscule(ponctuation_str(phrase_x + contenu[i + 1])) not in chaine_ponctuation:
+                return phrase_1.lower()+chr(46)
         else:
             for i in range(len(phrase_1),len(contenu)):
+
                 if contenu[i]!=chr(46):
                     phrase_x+=contenu[i]
                 else:
-                    if mot in phrase_x:
-                        return phrase_x.lower()+chr(46)
-                    if mot_maj in phrase_x:
-                        return phrase_x.lower()+chr(46)
+                    if mot in minuscule(ponctuation_str(phrase_x)) :
+                        if minuscule(ponctuation_str(phrase_x+contenu[i+1])) not in chaine_ponctuation:
+                            return phrase_x.lower()+chr(46)
                     else:
                         phrase_x=""
 
 
 def reponse_affinee(question,reponse):
-    dico_mot_interrogation={"Comment": "Après analyse,",
-                            "Pourquoi": "Car,",
-                            "Peux-tu": "Oui, bien sûr,",
-                            "Combien":"Désolé mais il est difficile de quantifier,"}
+    dico_mot_interrogation={"Comment": "Après analyse, ",
+                            "Pourquoi": "Car, ",
+                            "Peux-tu": "Oui, bien sûr, ",
+                            "Combien":"Désolé mais il est difficile de quantifier, "}
     for interrogation in dico_mot_interrogation.keys():
         if interrogation in question:
             reponse_complete=dico_mot_interrogation[interrogation]+reponse
             return reponse_complete
+    return reponse
+
+
+def afficher_mots_moins_importants(mot_pas_important):
+    ensemble_mot_pas_important=""
+    for i in range(len(mot_pas_important)):
+        ensemble_mot_pas_important+=mot_pas_important[i]+"\n"
+    # Create a new top-level window
+    dialog = tk.Toplevel()
+    dialog.title("Mots Moins Importants")
+    dialog.geometry("1000x300")  # Set your desired size
+
+    # Create a scrolled text widget for displaying information
+    txt = scrolledtext.ScrolledText(dialog, wrap=tk.WORD, width=40, height=10)
+    txt.pack(padx=10, pady=10)
+
+    # Inserting some text (replace this with your actual content)
+    txt.insert(tk.INSERT, ensemble_mot_pas_important)
+
+    # Disable editing of the text
+    txt.configure(state='disabled')
+
+    # Button to close the dialog
+    btn_close = tk.Button(dialog, text="Close", command=dialog.destroy)
+    btn_close.pack(pady=10)
+
+def afficher_mots_plus_importants(mot_import_dossier):
+    # Logic for displaying the most important words
+    messagebox.showinfo("Voici le mot le plus important du dossier :\n" , mot_import_dossier)
+# Variable globale pour stocker le texte entré
+question = ""
+
+def afficher_mots_plus_importants_Chirac(mot_import_chirac):
+    # Logic for displaying the most important words
+    messagebox.showinfo("Mots Plus Importants", "Mots plus importants ici :\n" + mot_import_chirac)
+# Variable globale pour stocker le texte entré
+
+def afficher_presi_nation(president_nation,presi_nation):
+    chaine=""
+    for i in range(len(president_nation)):
+        chaine+=president_nation[i]
+    # Logic for displaying the most important words
+    messagebox.showinfo("Voici les présidents parlant de Nation :\n" ,chaine, "\n-",presi_nation,"parle le plus de Nation")
+# Variable globale pour stocker le texte entré
+
+def afficher_presi_ecolo(president_ecolo):
+    # Logic for displaying the most important words
+    messagebox.showinfo("Voici le président parlant le plus de l'écologie :\n" , president_ecolo)
+# Variable globale pour stocker le texte entré
+
+
+def sauvegarder_texte(zone_texte):
+    global texte_utilisateur
+    texte_utilisateur = zone_texte.get("1.0", "end-1c")
+    messagebox.showinfo("Texte Sauvegardé", "Votre texte a été sauvegardé.")
+
+
+def afficher_texte_sauvegarde():
+    messagebox.showinfo("Texte Utilisateur", question)
+
+
+
+def quitter(window):
+    window.destroy()
+
