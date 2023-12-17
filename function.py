@@ -262,7 +262,7 @@ def saisie():
         entree = input("Entrer un nombre compris entre 0 et 5 : ")
         if len(entree) > 1:
             break
-        elif ord(entree) > 47 and ord(entree) < 53: # l'entree est un nombre compris entre 0 et 9
+        elif ord(entree) > 47 and ord(entree) < 54: # l'entree est un nombre compris entre 0 et 9
             return int(entree)
 
 

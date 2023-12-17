@@ -29,8 +29,9 @@ if __name__=="__main__":
 
     Matrice = matrice_tfidf(directory_cleaned)
 
-    for i in range (len(Matrice )):
-        print(Matrice[i])
+    #Pour afficher la matrice
+    #for i in range (len(Matrice )):
+    #    print(Matrice[i])
 
     mot_pas_important=[]
     for j in range(1,len(Matrice)):
