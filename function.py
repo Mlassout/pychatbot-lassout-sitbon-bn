@@ -421,7 +421,7 @@ def phrase_prompt(fichier_speech,mot):
         if mot in phrase_1:
             return phrase_1
         if mot_maj in phrase_1:
-            return phrase_1
+            return phrase_1+chr(46)
         else:
             for i in range(len(phrase_1),len(contenu)):
                 if contenu[i]!=chr(46):
@@ -430,6 +430,6 @@ def phrase_prompt(fichier_speech,mot):
                     if mot in phrase_x:
                         return phrase_x
                     if mot_maj in phrase_x:
-                        return phrase_x
+                        return phrase_x+chr(46)
                     else:
                         phrase_x=""
