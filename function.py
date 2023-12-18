@@ -1,4 +1,10 @@
-#16/12 23h
+"""
+-CHATBOT PYTHON-
+-CHATBOF-
+Lassout Marc-Antoine
+Sitbon Samuel
+functions.py : fichier comportant toute les fonctions
+"""
 
 import os  # utilisé pour naviguer dans l'os
 import random # importer une possibilité de faire une fonction aléatoire
@@ -6,8 +12,12 @@ import math #module maths utilisé pour le TF-IDF
 import tkinter as tk
 from tkinter import messagebox, scrolledtext ,PhotoImage,Canvas
 
-# fonction qui permet de récuperer le nom des fichiers d'un dossier donné
-def list_of_files(directory, extension): # entre en paramètre le nom du dossier et le type de fichier à récupérer
+
+def list_of_files(directory, extension):
+    """
+    Rôle: Liste tous les fichiers dans un répertoire donné avec une extension spécifique.
+    Paramètres: 'directory' - Le chemin du répertoire à explorer. 'extension' - L'extension des fichiers à lister.
+    Return: Liste des noms de fichiers avec l'extension spécifiée."""
 
     files_names = [] # création d'une liste pour stocker les noms
 
@@ -20,6 +30,10 @@ def list_of_files(directory, extension): # entre en paramètre le nom du dossier
 
 #fonction qui permet d'associer le nom des présidents avec leur prenom
 def associer_prenom_president(nom_president):
+    """
+    Rôle: Extrait uniquement les noms des titres à partir d'une liste de noms de fichiers.
+    Paramètres: 'x' - Liste des noms de fichiers complets.
+    Return: Liste contenant uniquement les noms extraits des titres des fichiers."""
 
     prenoms_presidents = {
         "Chirac ": " Jacques ",
@@ -31,9 +45,11 @@ def associer_prenom_president(nom_president):
 
     return prenoms_presidents.get(nom_president, " Inconnu ")
 
-
-# fonction qui permet de prendre la liste des fichiers afin d'extraire seulement le nom des présidents stockés dans une liste
-def new_list(l): # entre en paramètre la liste à traiter
+def new_list(l):
+    """
+    Rôle: Crée une nouvelle liste en extrayant et en nettoyant des segments spécifiques de chaque fichier pour récupérer le nom des présidents.
+    Paramètres: 'l' - Liste de chaînes de caractères où chaque élément est présumé avoir un format prédéfini avec des informations à extraire.
+    Return: Liste des fichiers nettoyées."""
 
     liste = [] # création d'une nouvelle liste
 
@@ -47,16 +63,23 @@ def new_list(l): # entre en paramètre la liste à traiter
     return liste # renvoie la liste
 
 
-# fonction qui permet d'enlever les doublons dans une liste
-def supp_doublons(l): # entre en paramètre la liste à traiter
+
+def supp_doublons(l):
+    """
+    Rôle: Élimine les doublons d'une liste.
+    Paramètres: 'l' - Liste potentiellement contenant des doublons.
+    Return: Nouvelle liste ne contenant pas de doublons."""
 
     l = list(set(l)) # parcour la liste pour enlever les doublons
 
     return l # renvoie la liste
 
 
-# fonction qui prend une chaine str comprenant des majuscules et renvoit une chaine str tout en minuscule
-def minuscule(txt): # entre en paramètre la chaine str à traiter
+def minuscule(txt):
+    """
+    Rôle: Convertit tous les caractères majuscules d'une chaîne en minuscules.
+    Paramètres: 'txt' - Chaîne de caractères à convertir.
+    Return: Nouvelle chaîne de caractères en minuscule."""
 
     txt = list(txt) # met tous les caractères de la chaine dans une liste
     for i in range (len(txt)): # parcour toute la liste
@@ -66,8 +89,12 @@ def minuscule(txt): # entre en paramètre la chaine str à traiter
     return "".join(txt) # renvoie la liste en texte
 
 
-# fonction qui permet d'enlever la ponctuation d'une chaine str
-def ponctuation_str(l) : # entre en paramètre une chaine str
+
+def ponctuation_str(l) :
+    """
+    Rôle: Supprime tous les ponctuations d'une chaîne de caractères.
+    Paramètres: 'l' - Chaîne de caractères à nettoyer.
+    Return: Chaîne de caractères sans les signes de ponctuation."""
 
     list_ponctuation = ["!","+","#",".",",","?",";",":","(",")",":","=","`",'"'] # création d'une liste comprenant toute les ponctuations
     list_ponctuation_special = ["'","-"]# création d'une liste comprenant toute les ponctuations spéciales
@@ -84,10 +111,12 @@ def ponctuation_str(l) : # entre en paramètre une chaine str
     return chaine # renvoie la chaine
 
 
-# Fonction Cleaned avec suppression de la directory si existante
-# (permet plusieurs exécutions du programme sans suppression manuelle...)
-
 def cleaned(liste_fichiers):
+    """
+    Rôle: Nettoie le contenu de plusieurs fichiers en supprimant la ponctuation et en convertissant le texte en minuscules, puis sauvegarde les résultats dans un nouveau répertoire.
+    Paramètres: 'liste_fichiers' - Liste des noms de fichiers à nettoyer.
+    Return: Aucun. Les fichiers nettoyés sont écrits dans un nouveau répertoire."""
+
     # Suppression du répertoire "cleaned" s'il existe
     if os.path.exists("./cleaned"):
         for fichier in os.listdir("./cleaned"):
@@ -112,6 +141,11 @@ def cleaned(liste_fichiers):
             p.write(contenu_nettoye)
 
 def scan_ligne(chaine):
+    """
+    Rôle: Analyse une chaîne de caractères et compte la fréquence de chaque mot.
+    Paramètres: 'chaine' - La chaîne de caractères à analyser.
+    Return: Dictionnaire avec chaque mot comme clé et sa fréquence comme valeur."""
+
 
     dico={}   # on définit un dictionnaire vide
     mot=""   # on crée une variable mot où l'on stocke une chaine vide
@@ -145,9 +179,12 @@ def scan_ligne(chaine):
 
     return dico
 
-#fonction dictionnaire mot/nbr iteration
 
 def cpt_word(directory):
+    """
+    Rôle: Compte la fréquence de chaque mot dans tous les fichiers d'un répertoire.
+    Paramètres: 'directory' - Le chemin du répertoire contenant les fichiers texte.
+    Return: Dictionnaire avec chaque mot comme clé et sa fréquence globale comme valeur."""
 
     dictionnaire={}    # on crée un dictionnaire vide
     texte=""  # Initialise une chaîne de caractères vide qui sera utilisée pour stocker le contenu combiné de tous les fichiers
@@ -167,8 +204,12 @@ def cpt_word(directory):
 
 
 
-def score_idf_dico(directory):     # Score IDF d'un mot, soit l'importance d'un mot dans un ensemble de texte
-    TF = {}       # Création du dictionnaire IDF
+def score_idf_dico(directory):
+    """
+    Rôle: Calcule l'Inverse Document Frequency (IDF) pour chaque mot présent dans les fichiers d'un répertoire.
+    Paramètres: 'directory' - Le chemin du répertoire contenant les fichiers texte.
+    Return: Dictionnaire avec chaque mot comme clé et son score IDF comme valeur."""
+
     dico={}
     list_name = list_of_files(directory,"txt")     # Liste des noms des fichiers
     for i in range(len(list_name)):
@@ -188,12 +229,14 @@ def score_idf_dico(directory):     # Score IDF d'un mot, soit l'importance d'un 
 
     return dico
 
-
-
-#fonction qui prend un dossier et retourne matrice tf idf en fonction de chaque fichier
 def matrice_tfidf(directory):
+    """
+    Rôle: Construit une matrice TF-IDF pour un ensemble de documents textuels dans un répertoire donné.
+    Paramètres: 'directory' - Le chemin du répertoire contenant les fichiers texte.
+    Return: Matrice TF-IDF, où chaque ligne représente un mot et chaque colonne représente un document."""
+
     dico_TFIDF = {}       # création de dictionnaires vides
-    dico_TF = {}
+
 
     List=[]         # création de liste vide
 
@@ -245,30 +288,26 @@ def matrice_tfidf(directory):
 # -----
 
 def saisie():
-    '''
-       Fonction de saisie d'un nombre entre 0 et 9.
+    """
+    Rôle: Demande à l'utilisateur de saisir un nombre compris entre 0 et 5.
+    Paramètres: Aucun.
+    Return: Retourne le nombre saisi en tant qu'entier si la saisie est valide."""
 
-       Aucun argument en entrée.
-
-       Sortie :
-       - valeur : int
-           Valeur numérique comprise entre 0 et 9 (un seul caractère saisi).
-
-       La fonction utilise une boucle pour garantir une saisie correcte et valide.
-       Si l'entrée contient plus d'un caractère, la fonction ignore l'entrée et continue la boucle.
-       Si l'entrée est un nombre entre 0 et 5, la fonction renvoie cette valeur sous forme d'entier.
-       '''
     flag = True
     entree = ""
     while flag:
         entree = input("Entrer un nombre compris entre 0 et 5 : ")
         if len(entree) > 1:
             break
-        elif ord(entree) > 47 and ord(entree) < 54: # l'entree est un nombre compris entre 0 et 9
+        elif ord(entree) > 47 and ord(entree) < 54: # l'entree est un nombre compris entre 0 et 5
             return int(entree)
 
 
 def word_question(chaine):
+    """
+    Rôle: Analyse une chaîne de caractères et extrait les mots.
+    Paramètres: 'chaine' - une chaîne de caractères représentant la question.
+    Return: Liste des mots issus de la question."""
 
     list=[]   # on définit une liste vide
     mot=""   # on crée une variable mot où l'on stocke une chaine vide
@@ -295,6 +334,10 @@ def word_question(chaine):
 
 
 def mot_important(list,matrice):
+    """
+    Rôle: Identifie les mots importants de la question en les comparant à la matrice du corpus.
+    Paramètres: 'list' - liste de mots à vérifier, 'matrice' - matrice de référence pour la comparaison.
+    Return: Liste des mots considérés importants."""
 
     list_mot=[]
     for mot in list:
@@ -306,6 +349,11 @@ def mot_important(list,matrice):
     return list_mot
 
 def cpt_mot_question(dico):
+    """
+    Rôle: Calcule le nombre total d'occurrences des mots dans une question.
+    Paramètres: 'dico' - dictionnaire des mots avec leur comptage.
+    Return: Nombre total d'occurrences des mots."""
+
     cpt_total=0
     for nombre in dico.values():
         cpt_total+=nombre
@@ -313,6 +361,11 @@ def cpt_mot_question(dico):
 
 
 def Matrice_filtre_matrice(dico,matrice,dico_idf):
+    """
+    Rôle: Filtre la matrice du corpus pour ne conserver que les mots présents dans la question.
+    Paramètres: 'dico' - dictionnaire de mots à filtrer, 'matrice' - matrice de référence(question), 'dico_idf' - dictionnaire avec les scores IDF.
+    Return: Matrice filtrée avec les mots et leur score TF-IDF."""
+
     Matrice=[]
     ligne_0 = [0, "Question"]
     Matrice.append(ligne_0)
@@ -325,15 +378,18 @@ def Matrice_filtre_matrice(dico,matrice,dico_idf):
                 L.append(TF_IDF)
                 Matrice.append(L)
 
-        print(Matrice)
     return Matrice
+
 
 #Calcul similarité deux vecteurs
 
 
-
-
 def produit_scalaire(A,B,colonne_A,colonne_B):
+    """
+    Rôle: Calcule le produit scalaire de deux vecteurs.
+    Paramètres: 'A' et 'B' - matrices représentant les vecteurs, 'colonne_A' et 'colonne_B' - indices des colonnes pour le calcul.
+    Return: Résultat du produit scalaire."""
+
     somme=0
     for i in range (1,len(A)):
         somme+=A[i][colonne_A]*B[i][colonne_B]
@@ -342,6 +398,11 @@ def produit_scalaire(A,B,colonne_A,colonne_B):
 
 
 def norme_vecteur(A, colonne):
+    """
+    Rôle: Calcule la norme d'un vecteur.
+    Paramètres: 'A' - matrice représentant le vecteur, 'colonne' - indice de la colonne pour le calcul.
+    Return: Norme du vecteur."""
+
     somme = 0
     for i in range(1,len(A)):
         somme += A[i][colonne]**2
@@ -350,15 +411,10 @@ def norme_vecteur(A, colonne):
     return somme
 
 def calcul_similarite(A, B, colonne_A, colonne_B):
-
-    """Calcule la similarité (cosinus) entre deux vecteurs.
-
-    Args:
-    A, B (list): Deux listes représentant les vecteurs.
-    colonne_A, colonne_B (int): Indices des colonnes à utiliser dans les vecteurs A et B.
-
-    Returns:
-    float: Similarité cosinus entre les vecteurs A et B."""
+    """
+    Rôle: Calcule la norme d'un vecteur.
+    Paramètres: 'A' - matrice représentant le vecteur, 'colonne' - indice de la colonne pour le calcul.
+    Return: Norme du vecteur."""
 
     produit_normes = norme_vecteur(A, colonne_A) * norme_vecteur(B, colonne_B)
 
@@ -368,6 +424,11 @@ def calcul_similarite(A, B, colonne_A, colonne_B):
     return produit_scalaire(A, B, colonne_A, colonne_B) / produit_normes
 
 def similarite(Matrice_question_M, Matrice_corpus_M):
+    """
+    Rôle: Calcule la similarité cosinus entre deux vecteurs.
+    Paramètres: 'A' et 'B' - matrices des vecteurs, 'colonne_A' et 'colonne_B' - indices des colonnes des vecteurs à comparer.
+    Return: Score de similarité cosinus entre les vecteurs."""
+
     dictionnaire_vecteur_similarite = {}
     for i in range(1, len(Matrice_corpus_M[0])):
         score_similarite = calcul_similarite(Matrice_question_M, Matrice_corpus_M, 1, i)
@@ -376,6 +437,11 @@ def similarite(Matrice_question_M, Matrice_corpus_M):
 
 
 def croisement_mot_question_corpus(Matrice_corpus,Matrice_question):
+    """
+    Rôle: Trouve l'intersection des mots entre la matrice d'une question et celle d'un corpus.
+    Paramètres: 'Matrice_corpus' - matrice du corpus, 'Matrice_question' - matrice de la question.
+    Return: Matrice contenant les mots communs."""
+
     Matrice_dimension_M=[]
     for h in range (len(Matrice_question)):
         for i in range(len(Matrice_corpus)):
@@ -385,17 +451,31 @@ def croisement_mot_question_corpus(Matrice_corpus,Matrice_question):
     return Matrice_dimension_M
 
 def fichier_similarite(dico):
-    print(dico)
+    """
+    Rôle: Identifie le fichier le plus similaire basé sur le dictionnaire de similarité.
+    Paramètres: 'dico' - dictionnaire contenant les scores de similarité des fichiers.
+    Return: Nom du fichier le plus similaire."""
+
     valeur_la_plus_grande = max(dico.values())  # Trouver la plus grande valeur
     for fichier, valeur in dico.items():
         if valeur == valeur_la_plus_grande:
             return fichier  # Retourner le fichier correspondant
 
 def fichier_clean_vers_speach(fichier):
+    """
+    Rôle: Convertit un nom de fichier 'cleaned' en son équivalent 'speech'.
+    Paramètres: 'fichier' - nom du fichier à convertir.
+    Return: Nom converti du fichier."""
+
     fichier=fichier[8:]
     return fichier
 
 def le_mot_important_question(Matrice_question):
+    """
+    Rôle: Détermine le mot le plus important d'une question basé sur la matrice TF-IDF.
+    Paramètres: 'Matrice_question' - matrice TF-IDF de la question.
+    Return: Mot le plus impactant."""
+
     for i in range(1,len(Matrice_question)-1):
         if Matrice_question[i][1]>Matrice_question[i+1][1]:
             indice_i=i
@@ -405,6 +485,11 @@ def le_mot_important_question(Matrice_question):
     return mot_impactant
 
 def phrase_prompt(fichier_speech,mot):
+    """
+    Rôle: Recherche une phrase contenant le mot spécifique à chercher dans le fichier donné présent dans 'speech'.
+    Paramètres: 'fichier_speech' - nom du fichier de discours, 'mot' - mot à rechercher dans le discours.
+    Return: Phrase trouvée contenant le mot. Retourne None si aucune phrase n'est trouvée."""
+
     chaine_ponctuation=" -,?:;.'()"
     phrase_1=""
     phrase_x=""
@@ -434,6 +519,11 @@ def phrase_prompt(fichier_speech,mot):
 
 
 def reponse_affinee(question,reponse):
+    """
+    Rôle: Affine la réponse générée en y ajoutant un préfixe basé sur le type de question posée.
+    Paramètres: 'question' - la question posée, 'reponse' - la réponse générée à affiner.
+    Return: Réponse affinée avec le préfixe approprié."""
+
     dico_mot_interrogation={"Comment": "Après analyse, ",
                             "Pourquoi": "Car, ",
                             "Peux-tu": "Oui, bien sûr, ",
@@ -446,64 +536,121 @@ def reponse_affinee(question,reponse):
 
 
 def afficher_mots_moins_importants(mot_pas_important):
+    """
+    Rôle: Affiche une fenêtre Tkinter listant les mots considérés comme moins importants.
+    Paramètres: 'mot_pas_important' - liste des mots à afficher.
+    Return: Aucun. Une fenêtre Tkinter est générée pour l'affichage."""
+
     ensemble_mot_pas_important=""
     for i in range(len(mot_pas_important)):
         ensemble_mot_pas_important+=mot_pas_important[i]+"\n"
-    # Create a new top-level window
     dialog = tk.Toplevel()
     dialog.title("Mots Moins Importants")
-    dialog.geometry("1000x300")  # Set your desired size
+    dialog.geometry("1000x300")
 
-    # Create a scrolled text widget for displaying information
     txt = scrolledtext.ScrolledText(dialog, wrap=tk.WORD, width=40, height=10)
     txt.pack(padx=10, pady=10)
 
-    # Inserting some text (replace this with your actual content)
+
     txt.insert(tk.INSERT, ensemble_mot_pas_important)
 
-    # Disable editing of the text
+
     txt.configure(state='disabled')
 
-    # Button to close the dialog
     btn_close = tk.Button(dialog, text="Close", command=dialog.destroy)
     btn_close.pack(pady=10)
 
 def afficher_mots_plus_importants(mot_import_dossier):
-    # Logic for displaying the most important words
-    messagebox.showinfo("Voici le mot le plus important du dossier :\n" , mot_import_dossier)
-# Variable globale pour stocker le texte entré
-question = ""
+    """
+    Rôle: Affiche une fenêtre Tkinter listant le mots considéré comme moins important.
+    Paramètres: 'mot_import_dossier' - mot à afficher.
+    Return: Aucun. Une fenêtre Tkinter est générée pour l'affichage."""
+
+
+    messagebox.showinfo("Voici le mot le plus important du dossier :", "Voici le mot le plus important du dossier :\n" + mot_import_dossier)
+
+
 
 def afficher_mots_plus_importants_Chirac(mot_import_chirac):
-    # Logic for displaying the most important words
-    messagebox.showinfo("Mots Plus Importants", "Mots plus importants ici :\n" + mot_import_chirac)
-# Variable globale pour stocker le texte entré
+    """
+    Rôle: Affiche une fenêtre Tkinter listant le mot considéré comme le plus important du discours de Chirac.
+    Paramètres: 'mot_import_chirac' - mot à afficher.
+    Return: Aucun. Une fenêtre Tkinter est générée pour l'affichage."""
+
+
+    messagebox.showinfo("Mots Plus Importants", "Mots plus importants de Chirac ici :\n" + mot_import_chirac)
+
 
 def afficher_presi_nation(president_nation,presi_nation):
-    chaine=""
+    """
+    Rôle: Affiche une fenêtre Tkinter listant les présidents parlant le plus de nation.
+    Paramètres: 'president_nation' - liste des présidents à afficher, 'presi_nation' - président à afficher.
+    Return: Aucun. Une fenêtre Tkinter est générée pour l'affichage."""
+
+    chaine="Voici les présidents parlant de Nation :\n"
     for i in range(len(president_nation)):
-        chaine+=president_nation[i]
-    # Logic for displaying the most important words
-    messagebox.showinfo("Voici les présidents parlant de Nation :\n" ,chaine, "\n-",presi_nation,"parle le plus de Nation")
-# Variable globale pour stocker le texte entré
+        if i==(len(president_nation)-1):
+            chaine+=president_nation[i]+"\n\n"
+        else:
+            chaine += president_nation[i] + ", "
+    chaine+="Voici le président parlant le plus de Nation :\n" + presi_nation
+
+    messagebox.showinfo("Voici les présidents parlant de Nation :\n" ,chaine)
 
 def afficher_presi_ecolo(president_ecolo):
-    # Logic for displaying the most important words
+    """
+    Rôle: Affiche une fenêtre Tkinter listant les présidents parlant le plus d'écologie.
+    Paramètres: 'president_ecolo' - président à afficher.
+    Return: Aucun. Une fenêtre Tkinter est générée pour l'affichage."""
+
+    president_ecolo="Voici le président parlant le plus d'écologie :\n" + president_ecolo
+
     messagebox.showinfo("Voici le président parlant le plus de l'écologie :\n" , president_ecolo)
-# Variable globale pour stocker le texte entré
 
 
-def sauvegarder_texte(zone_texte):
+def sauvegarder_texte(zone_texte,Matrice,dico_idf):
+    """
+    Rôle: Sauvegarde le texte saisi, traite ce texte pour obtenir une réponse basée sur la matrice TF-IDF et ses scores IDF, et affiche cette réponse.
+    Paramètres: 'zone_texte' - widget Tkinter où le texte est saisi, 'Matrice' - matrice TF-IDF, 'dico_idf' - dictionnaire des scores IDF.
+    Return: Aucun. La réponse est affiché à l'utilisateur via la boîte de dialogue."""
+
     global texte_utilisateur
     texte_utilisateur = zone_texte.get("1.0", "end-1c")
-    messagebox.showinfo("Texte Sauvegardé", "Votre texte a été sauvegardé.")
+    if len(texte_utilisateur) != 0:
+        dico_mot_cpt = scan_ligne(ponctuation_str(minuscule(texte_utilisateur)))
+        cpt_question = cpt_mot_question(dico_mot_cpt)
+
+        mot_question = word_question(ponctuation_str(minuscule(texte_utilisateur)))
+        Matrice_mot_important = mot_important(mot_question, Matrice)
+        if len(Matrice_mot_important) < 2 :
+            messagebox.showinfo("Texte Sauvegardé", "\nErreur : Veuillez entrer une question plus précise\n")
 
 
-def afficher_texte_sauvegarde():
-    messagebox.showinfo("Texte Utilisateur", question)
+        # création de la Matrice des corpus de même dimension que celle de la question
+        Matrice_question_filtre = Matrice_filtre_matrice(dico_mot_cpt, Matrice, dico_idf)
+        Matrice_dimension_question = croisement_mot_question_corpus(Matrice, Matrice_question_filtre)
+
+        # détermination du fichier étant le plus similaire à la question
+        dico_similarite = similarite(Matrice_question_filtre, Matrice_dimension_question)
+        fichier_plus_grand_similarite = fichier_similarite(dico_similarite)
+        fichier_speech_etude = fichier_clean_vers_speach(fichier_plus_grand_similarite)
+
+        mot_a_chercher = le_mot_important_question(Matrice_question_filtre)
+        reponse = phrase_prompt(fichier_speech_etude, mot_a_chercher)
+        reponse_bot = reponse_affinee(texte_utilisateur, reponse)
+        if reponse_bot == None:
+            messagebox.showinfo("Texte Sauvegardé","\nErreur : Veuillez entrez une question plus précise\n")
+
+        else:
+            messagebox.showinfo("Texte Sauvegardé","\n - Voilà ma reponse :\n" + reponse_bot + "\n")
+
 
 
 
 def quitter(window):
-    window.destroy()
+    """
+    Rôle: Ferme la fenêtre Tkinter spécifiée.
+    Paramètres: 'window' - fenêtre Tkinter à fermer.
+    Return: Aucun. La fenêtre est fermée."""
 
+    window.destroy()
