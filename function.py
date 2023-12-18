@@ -1,8 +1,9 @@
 """
 -CHATBOT PYTHON-
 -CHATBOF-
-Lassout Marc-Antoine
-Sitbon Samuel
+Programmeur :
+        Lassout Marc-Antoine
+        Sitbon Samuel
 functions.py : fichier comportant toute les fonctions
 """
 
