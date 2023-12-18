@@ -289,7 +289,7 @@ if __name__=="__main__":
         btn_nation.pack()
         btn_quitter.pack()
 
-        photo = PhotoImage(file="/Users/marc-antoine/PycharmProjects/Chatcpt/chatbofnoir.png")
+        photo = PhotoImage(file="PycharmProjects/Chatcpt/chatbofnoir.png")
 
         canvas = Canvas(window, width=350, height=350)
         canvas.create_image(0, 0, anchor=tk.NW, image=photo)
