@@ -1,4 +1,6 @@
-#16/12 23h
+''' Programme python principale 
+    Programmeur: Samuel Sitbon Marc-Antoine lassoult 
+    version finale ''' 
 
 import os  # utilisé pour naviguer dans l'os
 import random # importer une possibilité de faire une fonction aléatoire
