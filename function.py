@@ -644,9 +644,6 @@ def sauvegarder_texte(zone_texte,Matrice,dico_idf):
         else:
             messagebox.showinfo("Texte Sauvegardé","\n - Voilà ma reponse :\n" + reponse_bot + "\n")
 
-
-
-
 def quitter(window):
     """
     Rôle: Ferme la fenêtre Tkinter spécifiée.

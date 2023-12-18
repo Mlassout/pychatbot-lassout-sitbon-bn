@@ -268,6 +268,7 @@ if __name__=="__main__":
 
 
 
+
         # Création des boutons
         btn_sauvegarder_texte = tk.Button(window, text="Envoyer la question", command=lambda: sauvegarder_texte(zone_texte,Matrice,dico_idf))
         btn_sauvegarder_texte.pack()
